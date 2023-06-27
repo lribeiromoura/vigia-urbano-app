@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import {
   GooglePlaceData,
@@ -6,20 +6,39 @@ import {
   GooglePlacesAutocomplete,
 } from "react-native-google-places-autocomplete";
 import { GOOGLE_MAPS_API_KEY } from "@env";
+import * as Location from "expo-location";
 
 type MapSearchInputProps = {
+  addressLocation: Location.LocationGeocodedAddress | null;
   onSelectAddress: (
     addressData: GooglePlaceData,
     addressDetail: GooglePlaceDetail | null
   ) => void;
 };
 
-export function MapSearchInput({ onSelectAddress }: MapSearchInputProps) {
+export function MapSearchInput({
+  onSelectAddress,
+  addressLocation,
+}: MapSearchInputProps) {
+  const [addressData, setAddressData] = useState<string | null>(null);
+  useEffect(() => {
+    if (addressLocation) {
+      setAddressData(addressLocation?.name);
+    } else {
+      setAddressData(null);
+    }
+  }, [addressLocation]);
   return (
     <FlatList
       data={[]}
       ListHeaderComponent={
         <GooglePlacesAutocomplete
+          textInputProps={{
+            value: addressData,
+            onChangeText: (text) => {
+              setAddressData(text);
+            },
+          }}
           placeholder="Digite o endereço"
           minLength={3}
           fetchDetails={true}

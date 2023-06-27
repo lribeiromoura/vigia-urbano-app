@@ -1,12 +1,11 @@
-import { Heading, Box, Image } from "native-base";
+import { Heading, Box, Image, Link } from "native-base";
 import VigiaUrbanoIcon from "../../../assets/images/vigia-urgano-icon.jpg";
 
 type HeaderComponentProps = {
-    user: User | null;
-}
+  user: User | null;
+};
 
-export function HeaderComponent({ user } : HeaderComponentProps){
-
+export function HeaderComponent({ user }: HeaderComponentProps) {
   return (
     <Box>
       <Box

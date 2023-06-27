@@ -38,30 +38,15 @@ export default function Home({ navigation }: any) {
   };
 
   const handleConfirm = () => {
-    navigation.navigate("ConfirmFormScreen");
-  }
+    navigation.navigate("OccurrenceFormScreen");
+  };
 
   return (
-    <LocationProvider>
+    <>
       <VStack backgroundColor="#fff" px={10} paddingTop="40px">
-        <HeaderComponent user={user} />
+        <HeaderComponent user={user} navigation={navigation}/>
       </VStack>
-      <MapComponent />
-      <Box
-        justifyContent="center"
-        alignItems="center"
-        padding={10}
-        style={{
-          position: "absolute",
-          bottom: 24,
-          width:'100%'
-        }}
-      >
-        <ButtonComponent
-          title="Confirmar"
-          onPress={handleConfirm}
-        />
-      </Box>
-    </LocationProvider>
+      <MapComponent handleConfirm={handleConfirm} />
+    </>
   );
 }

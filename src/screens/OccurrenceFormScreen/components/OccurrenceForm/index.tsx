@@ -1,17 +1,42 @@
-import { InputComponent } from "../../../../components/InputComponent";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
+import { InputComponent } from "../../../../components/InputComponent";
 import { ButtonComponent } from "../../../../components/ButtonComponent";
+import { TextAreaComponent } from "../../../../components/TextAreaComponent";
 
 import { confirmFormSchema } from "../../schema";
-import { TextAreaComponent } from "../../../../components/TextAreaComponent";
+import { useContext, useEffect } from "react";
+import { LocationContext } from "../../../../context/LocationContext";
+import { Select } from "native-base";
+import { SelectComponent } from "../../../../components/SelectComponent";
 
 type OccurrenceFormComponentProps = {
   onSubmit: (data: OccurrenceFormProps) => void;
 };
 
-export function OccurrenceFormComponent({ onSubmit }: OccurrenceFormComponentProps) {
+const OccurrenceTypes = [
+  "Buracos na rua ou calçada",
+  "Iluminação pública defeituosa",
+  "Acúmulo de lixo ou entulho",
+  "Vandalismo (grafite, danos ao patrimônio público, etc.)",
+  "Calçadas danificadas ou obstruídas",
+  "Falta de acessibilidade para deficientes",
+  "Sinalização de trânsito danificada ou ausente",
+  "Vegetação excessiva ou mal cuidada em espaços públicos",
+  "Problemas de esgoto ou drenagem",
+  "Construções irregulares ou ilegais",
+  "Ruído excessivo (devido a construções, tráfego, eventos, etc.)",
+  "Poluição do ar",
+  "Poluição da água (rios, lagos, etc.)",
+  "Infestação de pragas (ratos, pombos, insetos, etc.)",
+  "Problemas com equipamentos públicos (bancos quebrados, parques destruídos, etc.)",
+];
+
+export function OccurrenceFormComponent({
+  onSubmit,
+}: OccurrenceFormComponentProps) {
+  const { addressLocation } = useContext(LocationContext);
   const {
     control,
     handleSubmit,
@@ -19,29 +44,36 @@ export function OccurrenceFormComponent({ onSubmit }: OccurrenceFormComponentPro
   } = useForm<OccurrenceFormProps>({
     resolver: yupResolver(confirmFormSchema),
   });
+
   return (
     <>
       <Controller
         control={control}
         name="address"
-        render={({ field: { onChange } }) => (
+        defaultValue={(addressLocation && addressLocation.street) || ""}
+        render={({ field: { onChange, value } }) => (
           <InputComponent
             label="Endereço"
             placeholder="Digite o endereço"
             errorMessage={errors.address?.message}
             onChangeText={onChange}
+            value={value}
+            isDisabled={!!(addressLocation && addressLocation.street)}
           />
         )}
       />
       <Controller
         control={control}
         name="cep"
-        render={({ field: { onChange } }) => (
+        defaultValue={(addressLocation && addressLocation.postalCode) || ""}
+        render={({ field: { onChange, value } }) => (
           <InputComponent
             label="CEP"
             placeholder="Digite o CEP"
+            value={value}
             onChangeText={onChange}
             errorMessage={errors.cep?.message}
+            isDisabled={addressLocation?.postalCode !== undefined}
           />
         )}
       />
@@ -60,13 +92,15 @@ export function OccurrenceFormComponent({ onSubmit }: OccurrenceFormComponentPro
       <Controller
         control={control}
         name="typeInformacao"
-        render={({ field: { onChange } }) => (
-          <InputComponent
-            label="Tipo da ocorrência"
-            placeholder="Escolha o tipo de ocorrência"
-            onChangeText={onChange}
+        render={({ field: { onChange, value } }) => (
+          <SelectComponent
+            selectedValue={value}
+            onValueChange={onChange}
+            label="Tipo de ocorrência"
+            placeholder="Selecione uma opção"
+            options={OccurrenceTypes}
             errorMessage={errors.typeInformacao?.message}
-          />
+          />            
         )}
       />
       <Controller

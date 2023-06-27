@@ -5,7 +5,6 @@ import AuthContext from "../context/AuthContext";
 import Home from "../screens/Home";
 import SignUp from "../screens/SignUp";
 import SignIn from "../screens/SignIn";
-import { View } from "react-native";
 import OccurrenceFormScreen from "../screens/OccurrenceFormScreen";
 
 export default function Routes() {
@@ -31,9 +30,9 @@ export default function Routes() {
           options={{ headerShown: !user }}
         />
         <Stack.Screen
-          name="ConfirmFormScreen"
+          name="OccurrenceFormScreen"
           component={OccurrenceFormScreen}
-          options={{ headerShown: !!user, headerTitle: ""  }}
+          options={{ headerShown: !!user, headerTitle: "" }}
         />
       </Stack.Navigator>
     </NavigationContainer>

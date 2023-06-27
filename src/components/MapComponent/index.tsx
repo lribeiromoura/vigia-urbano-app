@@ -10,7 +10,6 @@ type LocationType = {
 } | null;
 
 type MapViewComponentProps = {
-  latLong: LatLongProps | null;
   location: LocationType;
   errorMsg: string | null;
   setErrorMsg: (message: string | null) => void;

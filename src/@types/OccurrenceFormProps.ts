@@ -3,5 +3,5 @@ type OccurrenceFormProps = {
     cep: string,
     number: string,
     typeInformacao: string,
-    detail: string
+    detail: string,
 }
