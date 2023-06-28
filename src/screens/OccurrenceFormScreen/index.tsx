@@ -1,4 +1,11 @@
-import { VStack, Center, HStack, Spinner, Box } from "native-base";
+import {
+  HStack,
+  Spinner,
+  ScrollView,
+  View,
+  FlatList,
+  KeyboardAvoidingView,
+} from "native-base";
 
 import AuthContext from "../../context/AuthContext";
 import { useContext, useState } from "react";
@@ -7,7 +14,7 @@ import { useToast } from "native-base";
 import { createOccurrence } from "../../services/OccurrenceServer";
 import { HeaderComponent } from "../../components/HeaderComponent";
 import { OccurrenceFormComponent } from "./components/OccurrenceForm";
-import { LocationContext, LocationProvider } from "../../context/LocationContext";
+import { LocationContext } from "../../context/LocationContext";
 
 export default function OccurrenceFormScreen({ navigation }: any) {
   const { user } = useContext(AuthContext);
@@ -21,7 +28,7 @@ export default function OccurrenceFormScreen({ navigation }: any) {
       if (!user) return;
       const userCredential = await createOccurrence({
         ...data,
-        uid: user?.uid,
+        uid: user.uid,
       });
       if (userCredential) {
         toast.show({
@@ -45,19 +52,28 @@ export default function OccurrenceFormScreen({ navigation }: any) {
     }
   };
 
+  const renderItem = () => (
+    <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={100}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View px={10} backgroundColor="#fff">
+          <HeaderComponent user={user} navigation={navigation} />
+          <OccurrenceFormComponent onSubmit={onSubmit} isLoading={isLoading} />
+          {isLoading && (
+            <HStack space={8} justifyContent="center" alignItems="center">
+              <Spinner size="lg" color="indigo.600" />
+            </HStack>
+          )}
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
+  );
   return (
-    <VStack flex={1} px={10} backgroundColor="#fff">
-        <HeaderComponent user={user} />
-        <Center>
-          <Box display="flex" width="100%" justifyContent="space-between">
-            <OccurrenceFormComponent onSubmit={onSubmit} />
-          </Box>
-        </Center>
-        {isLoading && (
-          <HStack space={8} justifyContent="center" alignItems="center">
-            <Spinner size="lg" color="indigo.600" />
-          </HStack>
-        )}
-    </VStack>
+    <FlatList
+      flex={1}
+      backgroundColor="#fff"
+      data={[{}]} // Não temos dados reais para renderizar, então passamos um array vazio
+      renderItem={renderItem} // O que queremos renderizar
+      keyExtractor={(item, index) => index.toString()} // Cada item precisa de uma chave única
+    />
   );
 }

@@ -7,9 +7,12 @@ import {
 } from "react-native-google-places-autocomplete";
 import { GOOGLE_MAPS_API_KEY } from "@env";
 import * as Location from "expo-location";
+import { ScrollView } from "native-base";
+import { InputComponent } from "../../../InputComponent";
 
 type MapSearchInputProps = {
   addressLocation: Location.LocationGeocodedAddress | null;
+  isLoading: boolean;
   onSelectAddress: (
     addressData: GooglePlaceData,
     addressDetail: GooglePlaceDetail | null
@@ -19,6 +22,7 @@ type MapSearchInputProps = {
 export function MapSearchInput({
   onSelectAddress,
   addressLocation,
+  isLoading,
 }: MapSearchInputProps) {
   const [addressData, setAddressData] = useState<string | null>(null);
   useEffect(() => {
@@ -30,15 +34,19 @@ export function MapSearchInput({
   }, [addressLocation]);
   return (
     <FlatList
+      keyboardShouldPersistTaps="handled"
       data={[]}
       ListHeaderComponent={
         <GooglePlacesAutocomplete
-          textInputProps={{
+        textInputProps={{
+            autoCorrect: false,
+            editable: !isLoading,
             value: addressData,
             onChangeText: (text) => {
               setAddressData(text);
             },
           }}
+          listViewDisplayed={false}
           placeholder="Digite o endereço"
           minLength={3}
           fetchDetails={true}

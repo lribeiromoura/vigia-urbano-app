@@ -5,3 +5,7 @@ type OccurrenceFormProps = {
     typeInformacao: string,
     detail: string,
 }
+
+type OccurrenceProps = {
+    occurrenceId: string;
+} & Pick<User, "uid"> & OccurrenceFormProps;

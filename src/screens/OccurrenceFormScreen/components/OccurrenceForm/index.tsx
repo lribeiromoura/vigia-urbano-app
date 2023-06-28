@@ -13,6 +13,7 @@ import { SelectComponent } from "../../../../components/SelectComponent";
 
 type OccurrenceFormComponentProps = {
   onSubmit: (data: OccurrenceFormProps) => void;
+  isLoading: boolean;
 };
 
 const OccurrenceTypes = [
@@ -35,6 +36,7 @@ const OccurrenceTypes = [
 
 export function OccurrenceFormComponent({
   onSubmit,
+  isLoading,
 }: OccurrenceFormComponentProps) {
   const { addressLocation } = useContext(LocationContext);
   const {
@@ -115,7 +117,7 @@ export function OccurrenceFormComponent({
           />
         )}
       />
-      <ButtonComponent title="Cadastrar" onPress={handleSubmit(onSubmit)} />
+      <ButtonComponent title="Cadastrar" onPress={handleSubmit(onSubmit)} disabled={isLoading} />
     </>
   );
 }

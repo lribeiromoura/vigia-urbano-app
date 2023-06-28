@@ -25,6 +25,8 @@ export function MapComponent({ handleConfirm }: MapComponentProps) {
     setAddressLocation,
   } = useContext(LocationContext);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleSetAddress = async (
     addressData: GooglePlaceData,
     addressDetail: GooglePlaceDetail | null
@@ -36,18 +38,21 @@ export function MapComponent({ handleConfirm }: MapComponentProps) {
         latitudeDelta: addressDetail.geometry.location.lat,
         longitudeDelta: addressDetail.geometry.location.lng,
       });
-      let fullAddress = await handleSetAddressLocation(addressDetail.geometry.location.lat, addressDetail.geometry.location.lng)
+      let fullAddress = await handleSetAddressLocation(
+        addressDetail.geometry.location.lat,
+        addressDetail.geometry.location.lng
+      );
       setAddressLocation(fullAddress);
     }
   };
 
-  const handleSetAddressLocation = async(lat: number, long: number) => {
+  const handleSetAddressLocation = async (lat: number, long: number) => {
     let regionName = await Location.reverseGeocodeAsync({
       latitude: lat,
       longitude: long,
     });
     return regionName[0];
-  }
+  };
 
   const submitConfirm = async () => {
     if (location) {
@@ -57,6 +62,7 @@ export function MapComponent({ handleConfirm }: MapComponentProps) {
 
   const getLocalLocation = async () => {
     let currentLocation: LocationType;
+    setIsLoading(true);
     if (!(await haveLocationAccess())) {
       return;
     }
@@ -75,17 +81,22 @@ export function MapComponent({ handleConfirm }: MapComponentProps) {
       longitude: currentLocation.longitude,
     });
     setAddressLocation(regionName[0]);
+    setIsLoading(false);
   };
 
   useEffect(() => {
-    if(!location) {
+    if (!location) {
       getLocalLocation();
     }
   }, [location, addressLocation]);
   return (
     <>
       <Box backgroundColor="#fff" px={10} paddingBottom={5}>
-        <MapSearchInput onSelectAddress={handleSetAddress} addressLocation={addressLocation}/>
+        <MapSearchInput
+          onSelectAddress={handleSetAddress}
+          addressLocation={addressLocation}
+          isLoading={isLoading}
+        />
       </Box>
       <MapViewComponent
         location={location}

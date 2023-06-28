@@ -9,6 +9,8 @@ import {
   HStack,
   Spinner,
   useToast,
+  KeyboardAvoidingView,
+  ScrollView,
 } from "native-base";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
@@ -68,67 +70,76 @@ export default function SignIn({ navigation }: any) {
   };
 
   return (
-    <VStack flex={1} px={10} backgroundColor="#fff">
-      <Center marginTop={50}>
-        <Heading>
-          <Image source={VigiaLogo} alt="Logo" />
-        </Heading>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior="padding"      
+    >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <VStack flex={1} px={10} backgroundColor="#fff">
+          <Center marginTop={50}>
+            <Heading>
+              <Image source={VigiaLogo} alt="Logo" />
+            </Heading>
 
-        <Controller
-          control={control}
-          name="email"
-          render={({ field: { onChange } }) => (
-            <InputComponent
-              label="Email"
-              placeholder="Digite o email cadastrado"
-              onChangeText={onChange}
-              errorMessage={errors.email?.message}
+            <Controller
+              control={control}
+              name="email"
+              render={({ field: { onChange } }) => (
+                <InputComponent
+                  label="Email"
+                  placeholder="Digite o email cadastrado"
+                  onChangeText={onChange}
+                  errorMessage={errors.email?.message}
+                />
+              )}
             />
-          )}
-        />
-        <Controller
-          control={control}
-          name="password"
-          render={({ field: { onChange } }) => (
-            <InputComponent
-              label="Senha"
-              placeholder="Digite a senha"
-              onChangeText={onChange}
-              errorMessage={errors.password?.message}
-              type={showPassword ? "text" : "password"}
-              InputRightElement={
-                <Pressable onPress={() => setShowPassword(!showPassword)}>
-                  <Icon
-                    as={
-                      <MaterialIcons
-                        name={showPassword ? "visibility" : "visibility-off"}
+            <Controller
+              control={control}
+              name="password"
+              render={({ field: { onChange } }) => (
+                <InputComponent
+                  label="Senha"
+                  placeholder="Digite a senha"
+                  onChangeText={onChange}
+                  errorMessage={errors.password?.message}
+                  type={showPassword ? "text" : "password"}
+                  InputRightElement={
+                    <Pressable onPress={() => setShowPassword(!showPassword)}>
+                      <Icon
+                        as={
+                          <MaterialIcons
+                            name={
+                              showPassword ? "visibility" : "visibility-off"
+                            }
+                          />
+                        }
+                        size={5}
+                        mr="2"
+                        color="muted.400"
                       />
-                    }
-                    size={5}
-                    mr="2"
-                    color="muted.400"
-                  />
-                </Pressable>
-              }
+                    </Pressable>
+                  }
+                />
+              )}
             />
-          )}
-        />
-        <ButtonComponent title="Entrar" onPress={handleSubmit(onSubmit)} />
+            <ButtonComponent title="Entrar" onPress={handleSubmit(onSubmit)} />
 
-        <ButtonComponent
-          title="Cadastrar"
-          contrast={true}
-          onPress={onSignUpPressed}
-          style={{
-            marginTop: 20,
-          }}
-        />
-      </Center>
-      {isLoading && (
-        <HStack space={8} justifyContent="center" alignItems="center">
-          <Spinner size="lg" color="indigo.600" />
-        </HStack>
-      )}
-    </VStack>
+            <ButtonComponent
+              title="Cadastrar"
+              contrast={true}
+              onPress={onSignUpPressed}
+              style={{
+                marginTop: 20,
+              }}
+            />
+          </Center>
+          {isLoading && (
+            <HStack space={8} justifyContent="center" alignItems="center">
+              <Spinner size="lg" color="indigo.600" />
+            </HStack>
+          )}
+        </VStack>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }

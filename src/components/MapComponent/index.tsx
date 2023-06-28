@@ -49,7 +49,7 @@ export function MapViewComponent({
         <MapView
           ref={mapRef}
           showsUserLocation={true}
-          followsUserLocation={true}
+          followsUserLocation={false}
           style={styles.map}
           initialRegion={location as Region}
           zoomControlEnabled={true}
