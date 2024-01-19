@@ -23,9 +23,6 @@ import AuthContext from "../../context/AuthContext";
 import VigiaLogo from "../../../assets/images/vigia-urbano-logo.png";
 
 import { signInSchema } from "./schema";
-import { getUserService } from "../../services/AuthService";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { SafeAreaView } from "react-native";
 
 type FormDataProps = {
   email: string;
@@ -50,11 +47,11 @@ export default function SignIn({ navigation }: any) {
   const onSubmit = async (data: FormDataProps) => {
     setIsLoading(true);
     try {
-      const userCredential = await getUserService(data.email, data.password);
-      if (userCredential) {
-        setUser(userCredential.user);
-        navigation.navigate("Home");
-      }
+      // const userCredential = await getUserService(data.email, data.password);
+      // if (userCredential) {
+      //   setUser(userCredential.user);
+      //   navigation.navigate("Home");
+      // }
     } catch (error) {
       toast.show({
         title: "Erro ao realizar login.",

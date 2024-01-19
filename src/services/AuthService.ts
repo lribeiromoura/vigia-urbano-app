@@ -1,48 +1,29 @@
-import {
-  createUserWithEmailAndPassword,
-  updateProfile,
-  signInWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
-import { auth, db } from "../config/firebaseConfig";
-import { collection, doc, setDoc } from "firebase/firestore";
+import axios from "axios";
+
+const axiosInstance = axios.create({ baseURL: "http://192.168.68.102:4001/" });
 
 const createUserService = async (data: FormDataProps) => {
   try {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      data.email,
-      data.password
-    );
-    const { user } = userCredential;
-    if (user) {
-      await updateProfile(user, { displayName: data.name });
-    }
-    return userCredential;
+    const response = await axiosInstance.post(`/users`, {
+      name: data.name,
+      CPF: data.CPF,
+      email: data.email,
+      password: data.password,
+    });
+    console.log(response);
+    return response.data;
   } catch (err) {
     console.log(err);
   }
 };
 
-const logoutUser = async () => {
+const checkUserExistsService = async (data: FormDataProps) => {
   try {
-    const userLogout = await signOut(auth);
-    return true;
+    const response = await axiosInstance.get(`/users/${data.CPF}`);
+    return response.data;
   } catch (err) {
     console.log(err);
-    return false;
   }
 };
 
-const getUserService = async (email: string, password: string) => {
-  try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    return userCredential;
-  } catch (err) {
-    console.log(err);
-    return null;
-  }
-};
-
-
-export { createUserService, getUserService, logoutUser };
+export { createUserService, checkUserExistsService };

@@ -1,7 +1,4 @@
 import { createContext, useEffect, useState } from "react";
-import { createUserService, getUserService } from "../../services/AuthService";
-import { UserCredential, onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "../../config/firebaseConfig";
 
 type AuthContextProps = {
   user: User | null;
@@ -21,7 +18,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
-        setUser
+        setUser,
       }}
     >
       {children}

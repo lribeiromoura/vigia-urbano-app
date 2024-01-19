@@ -20,6 +20,10 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { InputComponent } from "../../components/InputComponent";
 import { ButtonComponent } from "../../components/ButtonComponent";
 
+<<<<<<< Updated upstream
+=======
+import { signUpSchema } from "./schema";
+>>>>>>> Stashed changes
 import AuthContext from "../../context/AuthContext";
 
 import { signUpSchema } from "./schema";
@@ -27,6 +31,10 @@ import { signUpSchema } from "./schema";
 import { createUserService } from "../../services/AuthService";
 
 import VigiaUrbanoIcon from "../../../assets/images/vigia-urgano-icon.jpg";
+import {
+  checkUserExistsService,
+  createUserService,
+} from "../../services/AuthService";
 
 export default function SignUp({ navigation }: any) {
   const {
@@ -47,9 +55,20 @@ export default function SignUp({ navigation }: any) {
   const onSubmit = async (data: FormDataProps) => {
     try {
       setIsLoading(true);
+      const checkUserExists = await checkUserExistsService(data);
+
+      if (checkUserExists.CPF === data.CPF) {
+        toast.show({
+          title: "Usuário já cadastrado.",
+          description: "Tente fazer login.",
+        });
+        return;
+      }
+
       const userCredential = await createUserService(data);
+
       if (userCredential) {
-        setUser(userCredential.user);
+        setUser(userCredential);
         navigation.navigate("Home");
       } else {
         toast.show({
