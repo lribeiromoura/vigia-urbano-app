@@ -10,7 +10,6 @@ type LocationType = {
 } | null;
 
 type MapViewComponentProps = {
-  latLong: LatLongProps | null;
   location: LocationType;
   errorMsg: string | null;
   setErrorMsg: (message: string | null) => void;
@@ -50,7 +49,7 @@ export function MapViewComponent({
         <MapView
           ref={mapRef}
           showsUserLocation={true}
-          followsUserLocation={true}
+          followsUserLocation={false}
           style={styles.map}
           initialRegion={location as Region}
           zoomControlEnabled={true}

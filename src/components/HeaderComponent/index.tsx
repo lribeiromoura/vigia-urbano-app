@@ -1,12 +1,15 @@
-import { Heading, Box, Image } from "native-base";
+import { Heading, Box, Image, Pressable } from "native-base";
 import VigiaUrbanoIcon from "../../../assets/images/vigia-urgano-icon.jpg";
 
 type HeaderComponentProps = {
-    user: User | null;
-}
+  user: User | null;
+  navigation: any;
+};
 
-export function HeaderComponent({ user } : HeaderComponentProps){
-
+export function HeaderComponent({ user, navigation }: HeaderComponentProps) {
+  const handleNavigate = () => {
+    navigation.navigate("OccurrenceScreen");
+  };
   return (
     <Box>
       <Box
@@ -18,7 +21,9 @@ export function HeaderComponent({ user } : HeaderComponentProps){
         <Heading my={4} fontSize="3xl">
           {user?.displayName}
         </Heading>
-        <Image source={VigiaUrbanoIcon} alt="Icon logo" />
+        <Pressable onPress={handleNavigate}>
+          <Image source={VigiaUrbanoIcon} alt="Icon logo" />
+        </Pressable>
       </Box>
     </Box>
   );
